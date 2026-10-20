@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心輔系學術研究與文獻檢索小工具</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Morandi Dusty Pink & Muted Rose Palette
+                        rose: {
+                            50: '#faf5f5',
+                            100: '#f5e8e8',
+                            200: '#ebd4d4',
+                            300: '#dcb8b8',
+                            400: '#c89797',
+                            500: '#b27a7a',
+                            600: '#9b6060',
+                            700: '#7e4b4b',
+                            800: '#643c3c',
+                            900: '#4e3131',
+                        },
+                        sand: {
+                            50: '#fdfbf7',
+                            100: '#f7f3ed',
+                            200: '#efe6dc',
+                            300: '#dfd2c4',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfbf7;
+            color: #4a3e3e;
+        }
+        .step-active {
+            border-color: #c89797;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px -2px rgba(200, 151, 151, 0.12);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f5e8e8;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dcb8b8;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-rose-200 selection:text-rose-900">
+
+    <!-- Header / Navbar - Morandi Pink White Theme -->
+    <header class="bg-gradient-to-r from-rose-100 via-sand-100 to-rose-200 text-rose-900 border-b border-rose-200/60 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <span class="inline-block bg-white/80 text-rose-700 text-xs px-3 py-1 rounded-full font-medium mb-2 border border-rose-200 shadow-sm">
+                        <i class="fa-solid fa-heart-pulse mr-1 text-rose-400"></i> 心輔系學術研究小小助手
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-rose-900">心理與輔導研究計畫與文獻檢索指南</h1>
+                    <p class="text-rose-700/80 text-sm mt-1">給學弟妹的發想、文獻搜尋與研究問題建構工作台</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="#resources" class="text-xs bg-white/90 hover:bg-white text-rose-800 px-3.5 py-2 rounded-xl transition duration-200 flex items-center gap-1.5 shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-book-bookmark text-rose-400"></i> 資料庫清單
+                    </a>
+                    <a href="#sci-hub-guide" class="text-xs bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl transition duration-200 flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-key text-rose-200"></i> 英文文獻取得
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+
+        <!-- Banner Alert / Warm Intro -->
+        <div class="bg-white/80 border-l-4 border-rose-400 p-5 rounded-r-2xl shadow-sm border border-rose-100/80 flex items-start space-x-3.5">
+            <div class="bg-rose-100 p-2 rounded-xl text-rose-600 flex-shrink-0 mt-0.5">
+                <i class="fa-solid fa-seedling text-lg"></i>
+            </div>
+            <div class="text-sm text-rose-900 leading-relaxed">
+                <p class="font-medium text-rose-800">
+                    這邊提供一些研究相關資源，希望能在起頭與查找文獻上幫上大家一些忙 ✨<br>
+                    特別注意：以下有華藝期刊免費資源教學
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 1: Interactive Workflow Assistant -->
+        <section class="bg-white rounded-3xl shadow-sm border border-rose-100 overflow-hidden">
+            <div class="border-b border-rose-100 bg-sand-50/60 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-rose-900 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-rose-500"></i> 研究計畫撰寫 6 步驟發想器
+                    </h2>
+                    <p class="text-rose-700/70 text-sm mt-1">可在下方步驟框中輸入你的思考過程，系統會自動在最下方整理成發想草稿！</p>
+                </div>
+                <button onclick="clearAllInputs()" class="text-xs text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100/80 border border-rose-200 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 self-start sm:self-auto">
+                    <i class="fa-solid fa-rotate-left"></i> 清空重填
+                </button>
+            </div>
+
+            <div class="p-5 sm:p-8 space-y-6">
+
+                <!-- Step 1 -->
+                <div class="step-card border rounded-2xl p-5 transition-all duration-300 step-active" id="step1-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-rose-400 text-white w-8 h-8 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-sm">1</div>
+                        <div class="flex-grow space-y-2.5">
+                            <h3 class="font-bold text-base sm:text-lg text-rose-900">找自己有興趣的主題（先想想看可能的好奇）</h3>
+                            <p class="text-xs sm:text-sm text-rose-800/70">不用一開始就想得很完整，也不用急著組合！只要單純對某件事好奇即可。可以試著從以下方向給自己一些靈感：</p>
+                            
+                            <!-- Element Chips Guide -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 py-1">
+                                <div class="bg-sand-50 border border-rose-200/80 p-2.5 rounded-xl text-xs">
+                                    <span class="font-bold text-rose-800 block mb-0.5"><i class="fa-solid fa-users text-rose-400 mr-1"></i> 對某個族群好奇？</span>
+                                    <span class="text-rose-700/80">例如：國中拒學生、大專生、新手諮商師...</span>
+                                </div>
+                                <div class="bg-sand-50 border border-rose-200/80 p-2.5 rounded-xl text-xs">
+                                    <span class="font-bold text-rose-800 block mb-0.5"><i class="fa-solid fa-hands-holding-child text-rose-400 mr-1"></i> 對某個取向好奇？</span>
+                                    <span class="text-rose-700/80">例如：敘事取向、正念體驗、焦點解決...</span>
+                                </div>
+                                <div class="bg-sand-50 border border-rose-200/80 p-2.5 rounded-xl text-xs">
+                                    <span class="font-bold text-rose-800 block mb-0.5"><i class="fa-solid fa-chart-line text-rose-400 mr-1"></i> 對某個現象/變項好奇？</span>
+                                    <span class="text-rose-700/80">例如：幸福感、情緒調節、職業耗竭...</span>
+                                </div>
+                            </div>
+
+                            <input type="text" id="input-step1" oninput="updateSummary()" placeholder="寫下任何你目前好奇的事，例：想了解國中拒學生 / 對敘事取向有興趣 / 想看幸福感相關研究" class="w-full text-sm p-3 bg-sand-50/50 border border-rose-200/80 rounded-xl focus:ring-2 focus:ring-rose-300 focus:bg-white outline-none transition placeholder:text-rose-300">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card border rounded-2xl p-5 transition-all duration-300 step-active" id="step2-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-rose-400 text-white w-8 h-8 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-sm">2</div>
+                        <div class="flex-grow space-y-2.5">
+                            <h3 class="font-bold text-base sm:text-lg text-rose-900">找一篇相關論文</h3>
+                            <p class="text-xs sm:text-sm text-rose-800/70">建議先從免費與開放資源著手：<strong class="text-rose-700 font-semibold">「臺灣博碩士論文知識加值系統」</strong> 或 <strong class="text-rose-700 font-semibold">「人文及社會科學期刊開放取用平台 (TOAJ)」</strong> 開始搜尋。</p>
+                            <div class="flex flex-wrap gap-2 pt-1">
+                                <a href="https://ndltd.ncl.edu.tw/" target="_blank" rel="noopener noreferrer" class="text-xs bg-rose-50 text-rose-700 hover:bg-rose-100 font-medium px-3.5 py-1.5 rounded-lg transition inline-flex items-center gap-1.5 border border-rose-200">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> 臺灣博碩士論文網
+                                </a>
+                                <a href="https://toaj.stpi.niar.org.tw/index" target="_blank" rel="noopener noreferrer" class="text-xs bg-rose-50 text-rose-700 hover:bg-rose-100 font-medium px-3.5 py-1.5 rounded-lg transition inline-flex items-center gap-1.5 border border-rose-200">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> TOAJ 期刊開放平台
+                                </a>
+                            </div>
+                            <input type="text" id="input-step2" oninput="updateSummary()" placeholder="紀錄第一篇找到的入門論文，例：張○○（2022）。大學生社交焦慮與人際適應：心理韌性之中介效果。" class="w-full text-sm p-3 bg-sand-50/50 border border-rose-200/80 rounded-xl focus:ring-2 focus:ring-rose-300 focus:bg-white outline-none transition placeholder:text-rose-300">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card border rounded-2xl p-5 transition-all duration-300 step-active" id="step3-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-rose-400 text-white w-8 h-8 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-sm">3</div>
+                        <div class="flex-grow space-y-2.5">
+                            <h3 class="font-bold text-base sm:text-lg text-rose-900">看作者使用的關鍵字</h3>
+                            <p class="text-xs sm:text-sm text-rose-800/70">記錄論文中重複出現的專業名詞與 Key Terms，並使用這些關鍵字持續擴展搜尋。</p>
+                            <input type="text" id="input-step3" oninput="updateSummary()" placeholder="例：社交焦慮 (Social Anxiety)、情緒調節 (Emotion Regulation)、心理韌性 (Resilience)" class="w-full text-sm p-3 bg-sand-50/50 border border-rose-200/80 rounded-xl focus:ring-2 focus:ring-rose-300 focus:bg-white outline-none transition placeholder:text-rose-300">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-card border rounded-2xl p-5 transition-all duration-300 step-active" id="step4-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-rose-400 text-white w-8 h-8 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-sm">4</div>
+                        <div class="flex-grow space-y-2.5">
+                            <h3 class="font-bold text-base sm:text-lg text-rose-900">看引用文獻（順藤摸瓜）</h3>
+                            <p class="text-xs sm:text-sm text-rose-800/70">找出該領域經常被引用的核心經典文獻，了解這個心理學或諮商概念最初是如何被提出與發展的。</p>
+                            <textarea id="input-step4" oninput="updateSummary()" rows="2" placeholder="例：Gross (1998) 的情緒調節歷程模型；Beck (1985) 的認知焦慮理論模型..." class="w-full text-sm p-3 bg-sand-50/50 border border-rose-200/80 rounded-xl focus:ring-2 focus:ring-rose-300 focus:bg-white outline-none transition resize-none placeholder:text-rose-300"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-card border rounded-2xl p-5 transition-all duration-300 step-active" id="step5-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-rose-400 text-white w-8 h-8 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-sm">5</div>
+                        <div class="flex-grow space-y-2.5">
+                            <h3 class="font-bold text-base sm:text-lg text-rose-900">整理概念與研究缺口 (Research Gap)</h3>
+                            <p class="text-xs sm:text-sm text-rose-800/70">現有研究做了什麼？還有哪些問題尚未被深入探討？是否有特定族群、情境或變項（如：不同諮商取向效果、特定年齡層）值得進一步研究？</p>
+                            <textarea id="input-step5" oninput="updateSummary()" rows="2" placeholder="例：過往研究多關注社交焦慮的特質分析，較少研究探討正念團體介入對提升大專生情緒調節能力與減緩社交焦慮的即時與追蹤效果..." class="w-full text-sm p-3 bg-sand-50/50 border border-rose-200/80 rounded-xl focus:ring-2 focus:ring-rose-300 focus:bg-white outline-none transition resize-none placeholder:text-rose-300"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="step-card border rounded-2xl p-5 transition-all duration-300 step-active" id="step6-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-rose-400 text-white w-8 h-8 rounded-xl flex items-center justify-center font-bold flex-shrink-0 shadow-sm">6</div>
+                        <div class="flex-grow space-y-2.5">
+                            <h3 class="font-bold text-base sm:text-lg text-rose-900">形成研究問題 (Research Question)</h3>
+                            <p class="text-xs sm:text-sm text-rose-800/70">將興趣、文獻發現與研究缺口整合成具體、明確且具可行性的研究問題。</p>
+                            <textarea id="input-step6" oninput="updateSummary()" rows="2" placeholder="例：短團體正念寫作方案對於減緩大專生社交焦慮與提升情緒調節能力之效果研究" class="w-full text-sm p-3 bg-sand-50/50 border border-rose-200/80 rounded-xl focus:ring-2 focus:ring-rose-300 focus:bg-white outline-none transition resize-none placeholder:text-rose-300"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Summary Box / Export Output -->
+            <div class="bg-rose-900 text-rose-50 p-6 sm:p-8 border-t border-rose-800">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <h3 class="font-bold text-base sm:text-lg flex items-center gap-2 text-rose-200">
+                        <i class="fa-solid fa-pen-to-square"></i> 我的心輔研究發想筆記草稿
+                    </h3>
+                    <button onclick="copySummary()" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-4 py-2.5 rounded-xl font-medium transition flex items-center gap-2 self-start sm:self-auto shadow-sm">
+                        <i class="fa-regular fa-copy"></i> 複製研究筆記
+                    </button>
+                </div>
+                <div id="summary-output" class="bg-rose-950/60 p-4 sm:p-5 rounded-2xl text-xs sm:text-sm font-mono text-rose-100 whitespace-pre-wrap leading-relaxed border border-rose-800/80 min-h-[140px] custom-scrollbar overflow-y-auto">填寫上方各步驟後，這裡將為你自動整理完整的發想架構草稿...</div>
+            </div>
+        </section>
+
+        <!-- Section 2: Recommended Database Resources -->
+        <section id="resources" class="space-y-6">
+            <div class="border-b border-rose-200/80 pb-3">
+                <h2 class="text-xl sm:text-2xl font-bold text-rose-900 flex items-center gap-2">
+                    <i class="fa-solid fa-database text-rose-500"></i> 心輔系常用論文資料庫指南
+                </h2>
+                <p class="text-rose-700/70 text-sm mt-1">精選心輔、心理諮商與社科領域免費及常用文獻檢索入口（點擊按鈕直接前往）</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Chinese Resources -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-rose-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-rose-800 font-bold mb-4 text-base sm:text-lg">
+                            <i class="fa-solid fa-book-open text-rose-400"></i> 中文文獻檢索資源
+                        </div>
+                        <ul class="space-y-3.5">
+                            <li class="p-4 bg-sand-50/70 rounded-2xl border border-rose-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <span class="font-semibold text-rose-900 text-sm block">1. 華藝期刊免費資源教學</span>
+                                    <p class="text-xs text-rose-700/70 mt-1">說明如何利用公開或校外連線授權免費下載華藝線上圖書館論文。</p>
+                                </div>
+                                <a href="https://vocus.cc/article/699d3634fd89780001053e78" target="_blank" rel="noopener noreferrer" class="bg-rose-500 hover:bg-rose-600 text-white text-xs px-3.5 py-2 rounded-xl font-medium transition flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm">
+                                    前往觀看 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </li>
+                            <li class="p-4 bg-sand-50/70 rounded-2xl border border-rose-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <span class="font-semibold text-rose-900 text-sm block">2. TOAJ 期刊開放取用平台</span>
+                                    <p class="text-xs text-rose-700/70 mt-1">收錄國內人文與社會科學（含心理、輔導領域）免費 Open Access 全文。</p>
+                                </div>
+                                <a href="https://toaj.stpi.niar.org.tw/index" target="_blank" rel="noopener noreferrer" class="bg-rose-500 hover:bg-rose-600 text-white text-xs px-3.5 py-2 rounded-xl font-medium transition flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm">
+                                    開啟 TOAJ <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </li>
+                            <li class="p-4 bg-sand-50/70 rounded-2xl border border-rose-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <span class="font-semibold text-rose-900 text-sm block">3. 臺灣博碩士論文知識加值系統</span>
+                                    <p class="text-xs text-rose-700/70 mt-1">國家圖書館維護，查找國內心輔系與相關碩博士論文的首選入口。</p>
+                                </div>
+                                <a href="https://ndltd.ncl.edu.tw/" target="_blank" rel="noopener noreferrer" class="bg-rose-500 hover:bg-rose-600 text-white text-xs px-3.5 py-2 rounded-xl font-medium transition flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm">
+                                    開啟博碩士網 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Foreign / English Resources -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-rose-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-rose-800 font-bold mb-4 text-base sm:text-lg">
+                            <i class="fa-solid fa-earth-americas text-rose-400"></i> 英文學術論文檢索與工具
+                        </div>
+                        <ul class="space-y-3.5">
+                            <li class="p-4 bg-sand-50/70 rounded-2xl border border-rose-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <span class="font-semibold text-rose-900 text-sm block">Google Scholar 學術搜尋</span>
+                                    <p class="text-xs text-rose-700/70 mt-1">搜尋心理學 APA 期刊與引用追蹤的最佳工具，可綁定學校圖書館館藏。</p>
+                                </div>
+                                <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer" class="bg-rose-500 hover:bg-rose-600 text-white text-xs px-3.5 py-2 rounded-xl font-medium transition flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm">
+                                    前往 Google Scholar <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </li>
+                            <li class="p-4 bg-sand-50/70 rounded-2xl border border-rose-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <span class="font-semibold text-rose-900 text-sm block">Sci-Hub 論文開放檢索服務</span>
+                                    <p class="text-xs text-rose-700/70 mt-1">輸入 APA 或外文期刊論文 DOI 網址，即可快速讀取學術全文。</p>
+                                </div>
+                                <a href="https://sci-hub.ren/" target="_blank" rel="noopener noreferrer" class="bg-rose-700 hover:bg-rose-800 text-white text-xs px-3.5 py-2 rounded-xl font-medium transition flex items-center justify-center gap-1.5 flex-shrink-0 shadow-sm">
+                                    前往 Sci-Hub <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Sci-Hub / DOI Interactive Helper & Visual Guide -->
+        <section id="sci-hub-guide" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-rose-100 space-y-6">
+            <div class="border-b border-rose-100 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-rose-900 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-rose-500"></i> 英文論文全文取得教學 (APA PsycNet & Sci-Hub)
+                    </h2>
+                    <p class="text-rose-700/70 text-sm mt-1">找不到英文論文全文時，只需 3 個步驟輕鬆透過 DOI 號碼獲取！</p>
+                </div>
+                
+                <a href="https://sci-hub.ren" target="_blank" rel="noopener noreferrer" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-4 py-2.5 rounded-xl font-medium transition flex items-center gap-1.5 self-start md:self-auto shadow-sm">
+                    <i class="fa-solid fa-external-link text-[10px]"></i> 直接前往 Sci-Hub 網站
+                </a>
+            </div>
+
+            <!-- Quick DOI Launcher Widget -->
+            <div class="bg-sand-50 p-5 rounded-2xl border border-rose-100">
+                <label class="block text-xs font-bold text-rose-800 mb-2">
+                    <i class="fa-solid fa-bolt text-rose-400"></i> DOI 快速查詢工具（輸入 DOI 網址直達全文）：
+                </label>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="doi-input" placeholder="例如貼上：10.1037/0022-3514.73.2.345 或完整的 DOI 網址" class="flex-grow text-xs sm:text-sm p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-300 outline-none transition placeholder:text-rose-300">
+                    <button onclick="openSciHub()" class="bg-rose-500 hover:bg-rose-600 text-white text-xs px-5 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 flex-shrink-0 shadow-sm">
+                        <i class="fa-solid fa-magnifying-glass"></i> 開啟論文全文
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step by Step Visual Flow -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                
+                <!-- Step 1 Card (Matching screenshot 1) -->
+                <div class="bg-sand-50/60 border border-rose-100 rounded-2xl p-5 flex flex-col items-center text-center">
+                    <span class="w-8 h-8 bg-rose-400 text-white font-bold rounded-xl flex items-center justify-center text-sm mb-3 shadow-sm">1</span>
+                    <h4 class="font-bold text-rose-900 mb-1 text-sm sm:text-base">複製 doi 網址</h4>
+                    <p class="text-xs text-rose-700/70 mb-4">在期刊網頁（如 APA PsycNet）找到文章的 doi 連結並複製。</p>
+                    <!-- Mock Preview Card -->
+                    <div class="w-full bg-white p-3.5 rounded-xl border border-rose-100 text-left space-y-1.5 shadow-xs">
+                        <div class="text-[10px] font-bold text-rose-400">APA PsycExtra / PsycNet</div>
+                        <div class="text-xs font-bold text-rose-900 leading-tight">Emotion regulation strategies and social anxiety...</div>
+                        <div class="text-[10px] text-rose-700/70">Gross, J. J. (1998)</div>
+                        <div class="mt-2 bg-rose-50 p-1.5 rounded border border-rose-200/80 text-[10px] text-rose-600 font-mono break-all font-semibold">
+                            https://doi.org/10.1037/0022-3514.73.2.345
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 Card (Matching screenshot 2) -->
+                <div class="bg-sand-50/60 border border-rose-100 rounded-2xl p-5 flex flex-col items-center text-center">
+                    <span class="w-8 h-8 bg-rose-400 text-white font-bold rounded-xl flex items-center justify-center text-sm mb-3 shadow-sm">2</span>
+                    <h4 class="font-bold text-rose-900 mb-1 text-sm sm:text-base">進入網址貼上 doi 連結</h4>
+                    <p class="text-xs text-rose-700/70 mb-4">開啟 <a href="https://sci-hub.ren" target="_blank" rel="noopener noreferrer" class="text-rose-600 font-semibold underline">sci-hub.ren</a> 網站，貼上 doi 網址後點擊 open。</p>
+                    <!-- Mock Preview Card -->
+                    <div class="w-full bg-white p-3.5 rounded-xl border border-rose-100 shadow-xs text-center">
+                        <div class="text-rose-900 font-bold text-base font-serif mb-1 tracking-wider">SCI-HUB</div>
+                        <div class="text-[9px] text-rose-700/60 mb-2">removing barriers on the way of knowledge</div>
+                        <div class="border border-rose-200 rounded p-1 text-[10px] text-rose-500 mb-2 truncate">https://doi.org/10.1037/...</div>
+                        <div class="bg-rose-700 text-white text-xs py-1 rounded-lg font-bold flex items-center justify-center gap-1">
+                            open <i class="fa-solid fa-key text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 Card (Matching screenshot 3) -->
+                <div class="bg-sand-50/60 border border-rose-100 rounded-2xl p-5 flex flex-col items-center text-center">
+                    <span class="w-8 h-8 bg-rose-400 text-white font-bold rounded-xl flex items-center justify-center text-sm mb-3 shadow-sm">3</span>
+                    <h4 class="font-bold text-rose-900 mb-1 text-sm sm:text-base">出現完整英文文獻</h4>
+                    <p class="text-xs text-rose-700/70 mb-4">系統自動載入全文 PDF，即可直接線上閱讀或下載保存。</p>
+                    <!-- Mock Preview Card -->
+                    <div class="w-full bg-white p-3.5 rounded-xl border border-rose-100 shadow-xs text-left space-y-1.5">
+                        <div class="h-2 bg-rose-200 rounded w-3/4"></div>
+                        <div class="h-1.5 bg-rose-100 rounded w-full"></div>
+                        <div class="h-1.5 bg-rose-100 rounded w-5/6"></div>
+                        <div class="h-1.5 bg-rose-100 rounded w-4/6"></div>
+                        <div class="text-center pt-2">
+                            <span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2.5 py-1 rounded-full border border-rose-200">
+                                <i class="fa-regular fa-file-pdf mr-1"></i> PDF 取得成功
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-rose-900 text-rose-200/80 text-center py-6 text-xs border-t border-rose-800 mt-12 space-y-1">
+        <p>心輔系學術研究與文獻檢索小指南 · 溫暖陪伴你的研究起點</p>
+        <p class="text-[11px] text-rose-300/60 font-light">製作者｜林映容</p>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-rose-900 text-white px-4 py-3 rounded-2xl shadow-xl transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2.5 text-xs sm:text-sm z-50 border border-rose-700">
+        <i class="fa-solid fa-circle-check text-rose-300 text-base"></i>
+        <span id="toast-message">內容已成功複製！</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Update summary preview dynamically for Counseling & Psychology
+        function updateSummary() {
+            const step1 = document.getElementById('input-step1').value.trim() || '(尚未填寫)';
+            const step2 = document.getElementById('input-step2').value.trim() || '(尚未填寫)';
+            const step3 = document.getElementById('input-step3').value.trim() || '(尚未填寫)';
+            const step4 = document.getElementById('input-step4').value.trim() || '(尚未填寫)';
+            const step5 = document.getElementById('input-step5').value.trim() || '(尚未填寫)';
+            const step6 = document.getElementById('input-step6').value.trim() || '(尚未填寫)';
+
+            const summaryText = 
+`【心輔系研究計畫思考草稿】
+--------------------------------------------------
+1. 興趣主題大方向：
+   ${step1}
+
+2. 第一篇入門文獻 / 論文：
+   ${step2}
+
+3. 核心關鍵字 (Key Terms)：
+   ${step3}
+
+4. 經典引用文獻與概念演進：
+   ${step4}
+
+5. 發現的研究缺口 (Research Gap)：
+   ${step5}
+
+6. 擬定之研究問題 (Research Question)：
+   ${step6}
+--------------------------------------------------
+* 產生自：心輔系學術研究與文獻檢索小工具`;
+
+            document.getElementById('summary-output').textContent = summaryText;
+        }
+
+        // Copy summary to clipboard
+        function copySummary() {
+            const summaryText = document.getElementById('summary-output').textContent;
+            
+            // Temporary textarea method for iframe compatibility
+            const tempInput = document.createElement('textarea');
+            tempInput.value = summaryText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast('研究筆記已成功複製到剪貼簿！');
+        }
+
+        // Clear all input fields
+        function clearAllInputs() {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`input-step${i}`).value = '';
+            }
+            updateSummary();
+            showToast('已清空所有內容');
+        }
+
+        // Open Sci-Hub link with entered DOI
+        function openSciHub() {
+            let doi = document.getElementById('doi-input').value.trim();
+            if (!doi) {
+                showToast('請先輸入 DOI 網址或編號');
+                return;
+            }
+
+            const sciHubBaseUrl = 'https://sci-hub.ren/';
+            const targetUrl = sciHubBaseUrl + doi;
+            window.open(targetUrl, '_blank');
+        }
+
+        // Show Toast Notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // Initial call
+        updateSummary();
+    </script>
+</body>
+</html>
